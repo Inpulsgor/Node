@@ -1,12 +1,20 @@
 const express = require("express");
 const app = express();
 
-// --> applies to each request
+/*
+ * Global middleware
+ * applies on each request
+ */
+
 app.use(express.json()); // JSON parse on request body
 app.use(express.urlencoded());
 app.use(express.static("public"));
 
-// --> GET /
+/*
+ * method:  "GET"
+ * path:    "/"
+ */
+
 app.get("/", (request, response, next) => {
 	response.set("Content-Type", "application/json");
 	response.status(205).send({ hello: "amigo" });
@@ -19,15 +27,27 @@ app.get("/", (request, response, next) => {
 	// next(error);
 	});
 
-// --> POST /
-app.post("/", () => {
+/*
+ * method:  "POST"
+ * path:    "/"
+ */
 
-}, (request, response, next) => {
-	console.log(request.body);
-	response.send(request.body);
-});
+app.post(
+  "/",
+  (request, response, next) => {
+	  next(); // goes to next middleware
+  },
+  (request, response) => {
+    console.log(request.body);
+    response.send(request.body);
+  }
+);
 
-// --> POST /login
+/*
+ * method:  "GET"
+ * path:    "/login"
+ */
+
 app.post("/login", (request, response, next) => {
 	console.log(request.body);
 	return response.send("Request was successfully handled");
@@ -37,14 +57,15 @@ app.post("/login", (request, response, next) => {
  * --> middleware обробки помилок
  */
 
-// app.use((error, request, response, next) => {
-// 	delete error.stack;
+app.use((error, request, response, next) => {
+	delete error.stack;
 
-// 	next(error);
-// });
+	next(error);
+});
 
 /*
- * --> Listen port 3002
+ * listen
+ * port: 3002
  */
 
 app.listen(3002, () => {
