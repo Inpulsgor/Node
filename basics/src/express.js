@@ -1,59 +1,51 @@
 const express = require("express");
-
 const app = express();
 
-app.use(express.json());
+// --> applies to each request
+app.use(express.json()); // JSON parse on request body
 app.use(express.urlencoded());
 app.use(express.static("public"));
 
-/*
- * GET /home
- */
+// --> GET /
+app.get("/", (request, response, next) => {
+	response.set("Content-Type", "application/json");
+	response.status(205).send({ hello: "amigo" });
+	// response.set("Set-Cookie", "some=value");
+	// request.headers
+	// request.get('Accept')
 
-app.get(
-	"/home",
-	(request, response, next) => {
-		response.set("Set-Cookie", "some=value");
+	// const error = new Error();
+	// error.status = 400;
+	// next(error);
+	});
 
-		const error = new Error();
-		error.status = 400;
+// --> POST /
+app.post("/", () => {
 
-		next(error);
-	},
-	(request, response, next) => {
-		return response.send({ answer: "here is your answer" });
-	}
-);
-
-/*
- * POST /home
- */
-
-app.post("/home", (request, response, next) => {
+}, (request, response, next) => {
 	console.log(request.body);
-
 	response.send(request.body);
 });
 
-/*
- * POST /login
- */
-
+// --> POST /login
 app.post("/login", (request, response, next) => {
 	console.log(request.body);
-
 	return response.send("Request was successfully handled");
 });
 
 /*
- * middleware обробки помилок
+ * --> middleware обробки помилок
  */
 
-app.use((error, request, response, next) => {
-	delete error.stack;
+// app.use((error, request, response, next) => {
+// 	delete error.stack;
 
-	next(error);
-});
+// 	next(error);
+// });
+
+/*
+ * --> Listen port 3002
+ */
 
 app.listen(3002, () => {
 	console.log("Listening port", 3002);
