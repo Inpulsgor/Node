@@ -54,7 +54,8 @@ app.post("/login", (request, response, next) => {
 });
 
 /*
- * --> middleware обробки помилок
+ * middleware
+ * обробки помилок
  */
 
 app.use((error, request, response, next) => {

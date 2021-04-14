@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 /*
-* not so good example
+* not good example
 */
 
 fs.writeFileSync('example.txt', 'hello world sync');
