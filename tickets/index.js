@@ -1,4 +1,6 @@
 const express = require('express');
+const Joi = require('joi');
+
 const app = express();
 const port = 3000;
 
@@ -9,7 +11,16 @@ app.use(express.json());
 app.get(
   "/weather",
   (req, res, next) => {
-	
+	const schema = Joi.object({
+		lat: Joi.string().required(),
+		lon: Joi.string().required()
+	});
+
+	const validationResult = schema.validate(req.query);
+
+	if (validationResult.error) return res.status(400).send(validationResult.error);
+
+	next();
   },
   (req, res, next) => {
     // console.log("body", req.body);
