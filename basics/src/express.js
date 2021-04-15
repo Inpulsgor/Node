@@ -8,7 +8,7 @@ const app = express();
 
 app.use(express.json()); // JSON parse on request body
 app.use(express.urlencoded());
-app.use(express.static("public"));
+app.use("/public", express.static("public")); // returns public folder data
 
 /*
  * method:  "GET"
