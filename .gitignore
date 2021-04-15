@@ -2,7 +2,7 @@
 node_modules/
 
 weather-api/node_modules/
-weather-api/.evn
+weather-api/.env
 
 basics/node_modules/
 
