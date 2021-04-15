@@ -1,10 +1,10 @@
 # dependencies
 node_modules/
 
-weather-api/node_modules/
-weather-api/.env
-
-basics/node_modules/
+# modules
+**/node_modules/
+**/*.env
+**/.env
 
 # production
 /build
