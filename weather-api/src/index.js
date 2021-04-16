@@ -5,15 +5,15 @@ const cors = require('cors');
 const Joi = require("joi");
 
 const url = "https://api.openweathermap.org";
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const app = express();
 dotenv.config(); // allows - process.env
 
 /*
- * ------------------------
+ * ------------------------------------------------
  * --> Methods
- * ------------------------
+ * ------------------------------------------------
  */
 
 // Validate query params
@@ -32,7 +32,7 @@ const validateQueryParams = (req, res, next) => {
 };
 
 // Fetch weather
-const getWeather = async (req, res, next) => {
+const fetchWeather = async (req, res, next) => {
 	const { lat, lon } = req.query;
 
 	const response = await fetch(
@@ -63,9 +63,9 @@ const addCorsHeaders = (req, res, next) => {
 };
 
 /*
- * ------------------------
+ * ------------------------------------------------
  * --> Global middleware
- * ------------------------
+ * ------------------------------------------------
  */
 
 app.use(express.json());
@@ -74,17 +74,17 @@ app.use(cors({ origin: "http://localhost:3000" })); // same as below
 // app.options("*", addCorsHeaders);
 
 /*
- * ------------------------
+ * ------------------------------------------------
  * --> Requests
- * ------------------------
+ * ------------------------------------------------
  */
 
-app.get("/weather", validateQueryParams, getWeather);
+app.get("/weather", validateQueryParams, fetchWeather);
 
 /*
- * ------------------------
+ * ------------------------------------------------
  * --> Listen port
- * ------------------------
+ * ------------------------------------------------
  */
 
 app.listen(port, () => console.log("Started listening on port", port));
