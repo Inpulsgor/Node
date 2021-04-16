@@ -8,12 +8,15 @@ const url = "https://api.openweathermap.org";
 const port = 3000;
 
 const app = express();
-dotenv.config();
+dotenv.config(); // allows - process.env
 
 /*
- * Helpers
+ * ------------------------
+ * --> Methods
+ * ------------------------
  */
 
+// Validate query params
 const validateQueryParams = (req, res, next) => {
   const schema = Joi.object({
     lat: Joi.string().required(),
@@ -28,6 +31,7 @@ const validateQueryParams = (req, res, next) => {
   next();
 };
 
+// Fetch weather
 const getWeather = async (req, res, next) => {
 	const { lat, lon } = req.query;
 
@@ -44,11 +48,13 @@ const getWeather = async (req, res, next) => {
 	res.status(200).send(responseBody);
 }
 
+// CORS origin
 const addAllowOriginHeader = (req, res, next) => {
 	res.set("Access-Control-Allow-Origin", "http://localhost:3000");
 	next();
 }
 
+// CORS headers
 const addCorsHeaders = (req, res, next) => {
 	res.set("Access-Control-Allow-Methods", req.headers["access-control-request-method"]);
 	res.set("Access-Control-Allow-Headers", req.headers["access-control-request-headers"]);
@@ -57,7 +63,9 @@ const addCorsHeaders = (req, res, next) => {
 };
 
 /*
- * Global middleware
+ * ------------------------
+ * --> Global middleware
+ * ------------------------
  */
 
 app.use(express.json());
@@ -66,13 +74,17 @@ app.use(cors({ origin: "http://localhost:3000" })); // same as below
 // app.options("*", addCorsHeaders);
 
 /*
- * Requests
+ * ------------------------
+ * --> Requests
+ * ------------------------
  */
 
 app.get("/weather", validateQueryParams, getWeather);
 
 /*
- * Listen port
+ * ------------------------
+ * --> Listen port
+ * ------------------------
  */
 
 app.listen(port, () => console.log("Started listening on port", port));
