@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-const userRouter = require('./routers/user.router');
+const userRouter = require('./users/user.router');
 
 module.exports = class UserServer {
   constructor() {
@@ -13,6 +13,7 @@ module.exports = class UserServer {
     this.initServer();
     this.initMiddleware();
     this.initRoutes();
+	this.startListening();
   }
 
   initServer() {
@@ -29,8 +30,6 @@ module.exports = class UserServer {
   };
 
   startListening() {
-	  this.server.listen(process.env.PORT, () => {
-		  console.log("Started listening on port " + process.env.PORT);
-	  });
+	  this.server.listen(process.env.PORT, () => console.log("Started listening on port " + process.env.PORT));
   };
 };
