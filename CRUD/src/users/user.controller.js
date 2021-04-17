@@ -45,12 +45,41 @@ class userController {
 		password: Joi.string().required()
     });
 
-	const result = Joi.validate(req.body, schema);
+	const result = schema.validate(req.body);
 
 	if(result.error) return res.status(400).send(result.error);
 
 	next();
   };
+
+  updateUser(req, res, next) {
+	  const id = parseInt(req.params.id);
+	  const targetIndex = users.findIndex(user => user.id === id);
+
+	  console.log(id);
+
+	  if (targetIndex === -1) return res.status(404).send("User does not exist");
+
+	  users[targetIndex] = {
+      ...users[targetIndex],
+      ...req.body,
+    };
+
+	  console.log(users);
+  }
+
+  validateUpdateUser(req, res, next) {
+	const schema = Joi.object({
+		name: Joi.string(),
+		email: Joi.string()
+	});
+
+	const result = schema.validate(req.body);
+
+    if (result.error) return res.status(400).send(result.error);
+
+    next();
+  }
 }
 
 module.exports = new userController();
