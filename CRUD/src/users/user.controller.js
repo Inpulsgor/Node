@@ -22,63 +22,92 @@ const users = [
 ];
 
 class userController {
+	get createUser() {
+		return this._createUser.bind(this);
+	};
+
+	get updateUser() {
+		return this._updateUser.bind(this);
+	};
+
+	get deleteUser() {
+		return this._deleteUser.bind(this);
+	};
+
+  // READ
   getUsers(req, res, next) {
     return res.json(users);
   }
 
-  createUser(req, res, next) {
-	const newUser = {
-		...req.body,
-		id: users.length + 1
-	}
-
-	users.push(newUser );
-
-	console.log("users -->", users);
-	return res.send();
-  };
-
+  // CREATE
   validateCreateUser(req, res, next) {
-	const schema = Joi.object({
-		name: Joi.string().required(),
-		email: Joi.string().required(),
-		password: Joi.string().required()
+    const schema = Joi.object({
+      name: Joi.string().required(),
+      email: Joi.string().required(),
+      password: Joi.string().required(),
     });
 
-	const result = schema.validate(req.body);
-
-	if(result.error) return res.status(400).send(result.error);
-
-	next();
-  };
-
-  updateUser(req, res, next) {
-	  const id = parseInt(req.params.id);
-	  const targetIndex = users.findIndex(user => user.id === id);
-
-	  console.log(id);
-
-	  if (targetIndex === -1) return res.status(404).send("User does not exist");
-
-	  users[targetIndex] = {
-      ...users[targetIndex],
-      ...req.body,
-    };
-
-	  console.log(users);
-  }
-
-  validateUpdateUser(req, res, next) {
-	const schema = Joi.object({
-		name: Joi.string(),
-		email: Joi.string()
-	});
-
-	const result = schema.validate(req.body);
+    const result = schema.validate(req.body);
 
     if (result.error) return res.status(400).send(result.error);
 
     next();
+  }
+
+  _createUser(req, res, next) {
+    const newUser = {
+      ...req.body,
+      id: users.length + 1,
+    };
+
+    users.push(newUser);
+
+    console.log("users -->", users);
+    return res.send();
+  }
+
+  // UPDATE
+  validateUpdateUser(req, res, next) {
+    const schema = Joi.object({
+      name: Joi.string(),
+      email: Joi.string(),
+    });
+
+    const result = schema.validate(req.body);
+
+    if (result.error) return res.status(400).send(result.error);
+
+    next();
+  }
+
+  _updateUser(req, res, next) {
+	const targetIndex = this.findUserById(res, req.params.id);
+	if (targetIndex === undefined) return;
+
+    users[targetIndex] = {
+      ...users[targetIndex],
+      ...req.body,
+    };
+
+	return status(200).send();
+  }
+
+  // DELETE
+  _deleteUser(req, res, next) {
+	const targetIndex = this.findUserById(res, req.params.id);
+	if (targetIndex === undefined) return;
+  }
+
+  findUserById(res, userID) {
+	const id = parseInt(userID);
+    const targetIndex = users.findIndex((user) => user.id === id);
+
+    if (targetIndex === -1) {
+      res.status(404).send("User does not exist");
+      return;
+    }
+
+	return targetIndex;
   }
 }
 
