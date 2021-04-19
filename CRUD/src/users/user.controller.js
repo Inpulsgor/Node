@@ -71,8 +71,7 @@ class userController {
 
     users.push(newUser);
 
-    console.log("users -->", users);
-    return res.send();
+    return res.send(users);
   }
 
   /*
@@ -95,10 +94,9 @@ class userController {
     next();
   }
 
-  _updateUser(req, res, next) {
+  async _updateUser(req, res, next) {
 	try {
 		const targetIndex = this.findUserById(res, req.params.id);
-		if (targetIndex === undefined) return;
 
 		users[targetIndex] = {
 		...users[targetIndex],
@@ -115,14 +113,16 @@ class userController {
    * --> DELETE
    */
 
-  _deleteUser(req, res, next) {
-    const targetIndex = this.findUserById(res, req.params.id);
+  async _deleteUser(req, res, next) {
+	  try {
+		const targetIndex = this.findUserById(res, req.params.id);
 
-    if (targetIndex === undefined) return;
+		users.splice(targetIndex, 1);
 
-	users.splice(targetIndex, 1);
-
-	return res.status(200).send(users);
+		return res.status(200).send(users);
+	  } catch (err) {
+		  next(err);
+	  }
   }
 
   // find user
@@ -131,12 +131,20 @@ class userController {
     const targetIndex = users.findIndex((user) => user.id === id);
 
     if (targetIndex === -1) {
-      res.status(404).send("User does not exist");
-      return;
+      throw new NotFoundError("User not found");
     }
 
     return targetIndex;
   }
 }
+
+class NotFoundError extends Error {
+	constructor(message) {
+		super(message);
+
+		this.status = 404;
+		delete this.stack;
+	}
+};
 
 module.exports = new userController();
