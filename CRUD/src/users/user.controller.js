@@ -22,24 +22,30 @@ const users = [
 ];
 
 class userController {
-	get createUser() {
-		return this._createUser.bind(this);
-	};
+  get createUser() {
+    return this._createUser.bind(this);
+  }
 
-	get updateUser() {
-		return this._updateUser.bind(this);
-	};
+  get updateUser() {
+    return this._updateUser.bind(this);
+  }
 
-	get deleteUser() {
-		return this._deleteUser.bind(this);
-	};
+  get deleteUser() {
+    return this._deleteUser.bind(this);
+  }
 
-  // READ
+  /*
+   * --> READ
+   */
+
   getUsers(req, res, next) {
     return res.json(users);
   }
 
-  // CREATE
+  /*
+   * --> CREATE
+   */
+
   validateCreateUser(req, res, next) {
     const schema = Joi.object({
       name: Joi.string().required(),
@@ -49,7 +55,10 @@ class userController {
 
     const result = schema.validate(req.body);
 
-    if (result.error) return res.status(400).send(result.error);
+    if (result.error) {
+      res.status(400).send(result.error);
+      return;
+    }
 
     next();
   }
@@ -66,7 +75,10 @@ class userController {
     return res.send();
   }
 
-  // UPDATE
+  /*
+   * UPDATE
+   */
+
   validateUpdateUser(req, res, next) {
     const schema = Joi.object({
       name: Joi.string(),
@@ -75,31 +87,47 @@ class userController {
 
     const result = schema.validate(req.body);
 
-    if (result.error) return res.status(400).send(result.error);
+    if (result.error) {
+      res.status(400).send(result.error);
+      return;
+    }
 
     next();
   }
 
   _updateUser(req, res, next) {
-	const targetIndex = this.findUserById(res, req.params.id);
-	if (targetIndex === undefined) return;
+	try {
+		const targetIndex = this.findUserById(res, req.params.id);
+		if (targetIndex === undefined) return;
 
-    users[targetIndex] = {
-      ...users[targetIndex],
-      ...req.body,
-    };
+		users[targetIndex] = {
+		...users[targetIndex],
+		...req.body,
+		};
 
-	return status(200).send();
+		return status(200).send();
+	} catch (err) {
+		next(err);
+	}
   }
 
-  // DELETE
+  /*
+   * --> DELETE
+   */
+
   _deleteUser(req, res, next) {
-	const targetIndex = this.findUserById(res, req.params.id);
-	if (targetIndex === undefined) return;
+    const targetIndex = this.findUserById(res, req.params.id);
+
+    if (targetIndex === undefined) return;
+
+	users.splice(targetIndex, 1);
+
+	return res.status(200).send(users);
   }
 
+  // find user
   findUserById(res, userID) {
-	const id = parseInt(userID);
+    const id = parseInt(userID);
     const targetIndex = users.findIndex((user) => user.id === id);
 
     if (targetIndex === -1) {
@@ -107,7 +135,7 @@ class userController {
       return;
     }
 
-	return targetIndex;
+    return targetIndex;
   }
 }
 
