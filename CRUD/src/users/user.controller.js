@@ -105,7 +105,7 @@ class userController {
 		...req.body,
 		};
 
-		return status(200).send();
+		return res.status(200).send(users);
 	} catch (err) {
 		next(err);
 	}

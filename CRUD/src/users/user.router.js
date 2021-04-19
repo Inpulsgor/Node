@@ -3,13 +3,14 @@ const express = require("express");
 const userRouter = express.Router();
 const userController = require("./user.controller");
 
-// CREATE --> [C]RUD
+// CREATE
 userRouter.post("/", userController.validateCreateUser, userController.createUser);
-// READ --> C[R]UD
+// READ
 userRouter.get("/", userController.getUsers);
-// UPDATE --> CR[U]D
+// UPDATE
 userRouter.put("/:id", userController.validateUpdateUser, userController.updateUser);
-// DELETE --> CRU[D]
+// DELETE
 userRouter.delete("/:id", userController.deleteUser);
+
 
 module.exports = userRouter;
