@@ -86,6 +86,7 @@ const updateUser = async (req, res, next) => {
 		if (!ObjectID.isValid(userID)) return res.status(404).send(); // if ObjectID is not valid - return 404
 
 		const updateResult = await usersCollection.updateOne({ _id: new ObjectID(userID) }, { $set: req.body });
+		console.log(updateResult);
 
 		if (!updateResult.modifiedCount) return res.status(404).send();
 
@@ -131,7 +132,7 @@ const main = async () => {
 	server.post("/users", validateCreateUser, CreateUser);
 	server.get("/users", getUsers);
 	server.get("/users/:id", getUserByID);
-	server.put("/users/:id", validateUpdateUser, updateUser); // Not working :(
+	server.put("/users/:id", validateUpdateUser, updateUser);
 	server.delete("/users/:id", deleteUserByID);
 
 	server.listen(process.env.PORT, () => console.log("Server listening on port", process.env.PORT));
