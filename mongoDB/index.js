@@ -1,16 +1,13 @@
 const mongodb = require('mongodb');
 const { MongoClient } = mongodb;
 
-const DB_NAME = 'test_db';
+require('dotenv').config();
 
 const main = async () => {
-	const client = await MongoClient.connect(MONGO_DB_URL, {
-		// useNewUrlParser: true,
-		useUnifiedTopology: true
-	});
+	const client = await MongoClient.connect(process.env.MONGODB_URL, { useUnifiedTopology: true });
 	console.log('Successfully connected to DB');
 
-	const db = client.db(DB_NAME);
+	const db = client.db(process.env.DB_NAME);
 	const test_collection = db.collection("test_collection");
 
 	// await test_collection.insertMany([
