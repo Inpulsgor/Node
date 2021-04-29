@@ -86,7 +86,6 @@ const updateUser = async (req, res, next) => {
 		if (!ObjectID.isValid(userID)) return res.status(404).send(); // if ObjectID is not valid - return 404
 
 		const updateResult = await usersCollection.updateOne({ _id: new ObjectID(userID) }, { $set: req.body });
-		console.log(updateResult);
 
 		if (!updateResult.modifiedCount) return res.status(404).send();
 
