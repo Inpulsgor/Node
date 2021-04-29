@@ -2,9 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const URL = process.env.MONGODB_URL;
-const PORT = process.env.PORT;
-
 /*
  * create server
  * init global middleware
@@ -39,10 +36,12 @@ module.exports = class UserServer {
 	};
 
 	async initDatabase() {
-		await mongoose.connect();
+		await mongoose.connect(process.env.MONGODB_URL);
 	};
 
 	startListening() {
+		const PORT = process.env.PORT;
+
 		this.server.listen(PORT, () => console.log("Server started listening on port", PORT));
 	};
  }
