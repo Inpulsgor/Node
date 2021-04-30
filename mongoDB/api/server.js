@@ -1,13 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
 require("dotenv").config();
 
 /*
- * create server
- * init global middleware
- * init routes
- * init database
- * start listening
+ * -- create server
+ * -- init global middleware
+ * -- init routes
+ * -- init database
+ * -- start listening
  */
 
 module.exports = class UserServer {
@@ -36,7 +37,11 @@ module.exports = class UserServer {
 	};
 
 	async initDatabase() {
-		await mongoose.connect(process.env.MONGODB_URL);
+		await mongoose.connect(process.env.MONGODB_URL,
+	{
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+    });
 	};
 
 	startListening() {
