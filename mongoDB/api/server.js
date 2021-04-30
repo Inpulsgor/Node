@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const userRouter = require("./routers/user");
 
 require("dotenv").config();
 
@@ -33,7 +34,7 @@ module.exports = class UserServer {
 	};
 
 	initRoutes() {
-
+		this.server.use("/users", userRouter);
 	};
 
 	async initDatabase() {
@@ -46,7 +47,6 @@ module.exports = class UserServer {
 
 	startListening() {
 		const PORT = process.env.PORT;
-
 		this.server.listen(PORT, () => console.log("Server started listening on port", PORT));
 	};
  }
