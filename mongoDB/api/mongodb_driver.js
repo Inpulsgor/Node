@@ -79,7 +79,7 @@ const validateUpdateUser = (req, res, next) => {
   next();
 };
 
-const updateUser = async (req, res, next) => {\
+const updateUser = async (req, res, next) => {
 	try {
 		const userID = req.params.id;
 
