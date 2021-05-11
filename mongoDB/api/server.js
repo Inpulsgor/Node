@@ -5,11 +5,11 @@ const userRouter = require("./routers/user");
 require("dotenv").config();
 
 /*
- * -- create server
- * -- init global middleware
- * -- init routes
- * -- init database
- * -- start listening
+ * -- start()           --> create server;
+ * -- initMiddleware()  --> init global middleware;
+ * -- initRoutes()      --> init routes
+ * -- initDatabase()    --> init database
+ * -- startListening()  --> start listening
  */
 
 module.exports = class UserServer {

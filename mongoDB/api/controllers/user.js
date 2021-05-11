@@ -12,7 +12,7 @@ class UserController {
 	};
   };
 
-  getUsers(req, res, next) {
+  async getUsers(req, res, next) {
 	try {
 		const users = await userModel.find().toArray();
 		return res.status(200).json(users);
@@ -21,14 +21,12 @@ class UserController {
 	}
   };
 
-  getUserByID(req, res, next) {
+  async getUserByID(req, res, next) {
 	try {
 		const userID = req.params.id;
-
 		if (!ObjectID.isValid(userID)) return res.status(404).send(); // if ObjectID is not valid - return 404
 
 		const user = await usersCollection.findOne({ _id: new ObjectID(userID) });
-
 		if (!user) return res.status(404).send(); // if user with current ID not found - return 404
 
 		return res.status(200).json(user);
@@ -37,10 +35,9 @@ class UserController {
 	}
   };
 
-  updateUser(req, res, next) {
+  async updateUser(req, res, next) {
 	try {
 		const userID = req.params.id;
-
 		if (!ObjectID.isValid(userID)) return res.status(404).send(); // if ObjectID is not valid - return 404
 
 		const updateResult = await usersCollection.updateOne(
@@ -56,7 +53,7 @@ class UserController {
 	}
   };
 
-  deleteUserByID(req, res, next) {
+  async deleteUserByID(req, res, next) {
 	try {
 		const userID = req.params.id;
 
