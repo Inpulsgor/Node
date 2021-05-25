@@ -48,11 +48,9 @@ const getUsers = async (req, res, next) => {
 const getUserByID = async (req, res, next) => {
 	try {
 		const userID = req.params.id;
-
 		if (!ObjectID.isValid(userID)) return res.status(404).send(); // if ObjectID is not valid - return 404
 
 		const user = await usersCollection.findOne({ _id: new ObjectID(userID) });
-
 		if (!user) return res.status(404).send(); // if user with current ID not found - return 404
 
 		return res.status(200).json(user);
@@ -82,11 +80,9 @@ const validateUpdateUser = (req, res, next) => {
 const updateUser = async (req, res, next) => {
 	try {
 		const userID = req.params.id;
-
 		if (!ObjectID.isValid(userID)) return res.status(404).send(); // if ObjectID is not valid - return 404
 
 		const updateResult = await usersCollection.updateOne({ _id: new ObjectID(userID) }, { $set: req.body });
-
 		if (!updateResult.modifiedCount) return res.status(404).send();
 
 		return res.status(204).send();
@@ -102,11 +98,9 @@ const updateUser = async (req, res, next) => {
 const deleteUserByID = async (req, res, next) => {
 	try {
 		const userID = req.params.id;
-
 		if (!ObjectID.isValid(userID)) return res.status(404).send(); // if ObjectID is not valid - return 404
 
 		const deleteResult = await usersCollection.deleteOne({ _id: new ObjectID(userID) });
-
 		if (!deleteResult.deletedCount) return res.status(404).send();
 
 		return res.status(204).send();
