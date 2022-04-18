@@ -13,7 +13,7 @@ module.exports = class UserServer {
     this.initServer();
     this.initMiddleware();
     this.initRoutes();
-	this.startListening();
+    this.startListening();
   }
 
   initServer() {
@@ -22,14 +22,16 @@ module.exports = class UserServer {
 
   initMiddleware() {
     this.server.use(express.json());
-    this.server.use(cors({ origin: "https://localhost:3000" }));
+    this.server.use(cors({ origin: 'https://localhost:3000' }));
   }
 
   initRoutes() {
-	this.server.use("/users", userRouter);
-  };
+    this.server.use('/users', userRouter);
+  }
 
   startListening() {
-	  this.server.listen(process.env.PORT, () => console.log("Started listening on port " + process.env.PORT));
-  };
+    this.server.listen(process.env.PORT, () =>
+      console.log('Started listening on port ' + process.env.PORT)
+    );
+  }
 };
